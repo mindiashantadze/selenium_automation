@@ -9,20 +9,29 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public final class ConfigService {
+public class ConfigService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConfigService.class);
-    private static Properties props = null;
+    private static Properties props = new Properties();
+    private static ConfigService configInstance = null;
 
-    public static Properties getProps() {
-        if (props == null) {
-            try (InputStream inputStream = new FileInputStream("src/test/resources/config.properties")){
-                props = new Properties();
-                props.load(inputStream);
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage());
-            }
+    public ConfigService() {
+        try (InputStream inputStream = new FileInputStream("src/test/resources/config.properties")){
+            props = new Properties();
+            props.load(inputStream);
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage());
+        }
+    }
+
+    public static ConfigService init() {
+        if (configInstance == null) {
+            return new ConfigService();
         }
 
-        return props;
+        return configInstance;
+    }
+
+    public static String get(String property) {
+        return props.getProperty(property);
     }
 }

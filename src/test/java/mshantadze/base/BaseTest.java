@@ -13,18 +13,17 @@ import java.util.Properties;
 
 public abstract class BaseTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseTest.class);
-    Properties props;
     protected WebDriver driver;
 
     @BeforeSuite
     public void loadProps() {
-        props = ConfigService.getProps();
+        ConfigService.init();
     }
 
     @BeforeTest
     public void beforeTests() {
         this.driver = new ChromeDriver();
-        this.driver.get(props.getProperty("url"));
+        this.driver.get(ConfigService.get("url"));
     }
 
     @AfterTest
