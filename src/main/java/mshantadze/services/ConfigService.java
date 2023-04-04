@@ -11,12 +11,12 @@ import java.util.Properties;
 
 public class ConfigService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConfigService.class);
-    private static Properties props = new Properties();
     private static ConfigService configInstance = null;
+    private Properties props = new Properties();
 
-    public ConfigService() {
+    private ConfigService() {
         try (InputStream inputStream = new FileInputStream("src/test/resources/config.properties")){
-            props = new Properties();
+            this.props = new Properties();
             props.load(inputStream);
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
@@ -25,13 +25,13 @@ public class ConfigService {
 
     public static ConfigService init() {
         if (configInstance == null) {
-            return new ConfigService();
+            configInstance = new ConfigService();
         }
 
         return configInstance;
     }
 
-    public static String get(String property) {
-        return props.getProperty(property);
+    public String get(String property) {
+        return this.props.getProperty(property);
     }
 }

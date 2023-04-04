@@ -14,16 +14,17 @@ import java.util.Properties;
 public abstract class BaseTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseTest.class);
     protected WebDriver driver;
+    private ConfigService configInstance;
 
     @BeforeSuite
     public void loadProps() {
-        ConfigService.init();
+        configInstance = ConfigService.init();
     }
 
     @BeforeTest
     public void beforeTests() {
         this.driver = new ChromeDriver();
-        this.driver.get(ConfigService.get("url"));
+        this.driver.get(configInstance.get("url"));
     }
 
     @AfterTest
