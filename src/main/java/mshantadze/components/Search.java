@@ -1,12 +1,14 @@
 package mshantadze.components;
 
+import mshantadze.components.base.BaseComponent;
+import mshantadze.utils.ui.UIElementWrapper;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class Search {
+public class Search extends UIElementWrapper {
     WebDriver driver;
 
     @FindBy(id = "gh-ac")
@@ -19,16 +21,16 @@ public class Search {
     WebElement categoriesDropDown;
 
     public Search(WebDriver driver) {
-        this.driver = driver;
+        super(driver);
         PageFactory.initElements(driver, this);
     }
 
     public void typeInSearchField(String productName) {
-        this.inptSearchField.sendKeys(productName);
+        type(inptSearchField, productName);
     }
 
     public void clickSearchButton() {
-        this.btnSearchProducts.click();
+        click(btnSearchProducts);
     }
 
     public void selectCategory(String categoryName) {
