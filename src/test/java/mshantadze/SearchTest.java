@@ -17,6 +17,7 @@ public class SearchTest extends BaseTest {
     @Test
     public void searchTest() {
         HomePage homePage = new HomePage(driver);
+        homePage.verifyThatPageIsLoaded();
         homePage.getSearchSection().typeInSearchField("Ball");
         homePage.getSearchSection().clickSearchButton();
         ProductListingPage plp = new ProductListingPage(driver);
