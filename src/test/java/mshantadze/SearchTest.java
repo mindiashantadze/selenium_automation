@@ -15,7 +15,7 @@ public class SearchTest extends BaseTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchTest.class);
 
     @Test
-    public void searchTest() {
+    public synchronized void searchTest() {
         HomePage homePage = new HomePage(driver);
         homePage.verifyThatPageIsLoaded();
         homePage.getSearchSection().typeInSearchField("Ball");
