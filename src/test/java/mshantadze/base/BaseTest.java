@@ -16,7 +16,6 @@ import java.util.Properties;
 public abstract class BaseTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseTest.class);
     protected WebDriver driver;
-    private static final int DRIVER_LOOP_SIZE = 20;
 
 
 
