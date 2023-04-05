@@ -1,6 +1,7 @@
 package mshantadze;
 
 import mshantadze.base.BaseTest;
+import mshantadze.pages.CategoriesPage;
 import mshantadze.pages.HomePage;
 import mshantadze.pages.ProductListingPage;
 import org.openqa.selenium.WebElement;
@@ -32,4 +33,40 @@ public class SearchTest extends BaseTest {
             );
         }
     }
+
+    @Test
+    public void emptySearch() {
+        HomePage homePage = new HomePage(driver);
+        homePage.verifyThatPageIsLoaded();
+        homePage.getSearchSection().clickSearchButton();
+        CategoriesPage categoriesPage = new CategoriesPage(driver);
+        String categoryTitle = categoriesPage.getCategoriesTitle().getText().trim();
+        Assert.assertEquals(categoryTitle, "All Categories", "Element should have text \"All Categories\"");
+        Assert.assertTrue(driver.getCurrentUrl().contains("all-categories"), "url should contain all-categories");
+    }
+
+    @Test
+    public void noProductsFound() {
+        HomePage homePage = new HomePage(driver);
+        homePage.verifyThatPageIsLoaded();
+        homePage.getSearchSection().typeInSearchField("somenonexistingproduct");
+        homePage.getSearchSection().clickSearchButton();
+        ProductListingPage plp = new ProductListingPage(driver);
+        String productNotFoundMessage = plp.getNoProductFoundLbl().getText().trim();
+        Assert.assertEquals(productNotFoundMessage, "No exact matches found", "Message should say that no matches were found");
+    }
+
+    @Test
+    public void searchWithCategories() {
+        HomePage homePage = new HomePage(driver);
+        homePage.verifyThatPageIsLoaded();
+        homePage.getSearchSection().typeInSearchField("Ball");
+        homePage.getSearchSection().selectCategory();
+        homePage.getSearchSection().clickSearchButton();
+        ProductListingPage plp = new ProductListingPage(driver);
+        String activeCategoryText = plp.getActiveCategory().getText();
+        Assert.assertEquals(activeCategoryText, "Selected category", "Category should be selected");
+    }
+
+
 }

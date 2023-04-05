@@ -13,18 +13,30 @@ import java.util.List;
 
 public class ProductListingPage extends BasePage {
     private final static Logger LOGGER = LoggerFactory.getLogger(ProductListingPage.class);
-    WebDriver driver;
 
     public ProductListingPage(WebDriver driver) {
         super(driver);
-        this.driver = driver;
         PageFactory.initElements(driver, this);
     }
 
     @FindBy(xpath = "//div[@id = 'srp-river-results']//span[@role = 'heading']")
-    List<WebElement> productNameLbls;
+    private List<WebElement> productNameLbls;
+
+    @FindBy(className = "srp-save-null-search__heading")
+    private WebElement noProductFoundLbl;
+
+    @FindBy(xpath = "//span[text() = 'Music']/span")
+    private WebElement activeCategory;
 
     public List<WebElement> getProductNames() {
-        return productNameLbls;
+        return this.productNameLbls;
+    }
+
+    public WebElement getNoProductFoundLbl() {
+        return this.noProductFoundLbl;
+    }
+
+    public WebElement getActiveCategory() {
+        return this.activeCategory;
     }
 }
