@@ -17,8 +17,6 @@ public abstract class BaseTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseTest.class);
     protected WebDriver driver;
 
-
-
     private ConfigService configInstance;
 
     @BeforeSuite
