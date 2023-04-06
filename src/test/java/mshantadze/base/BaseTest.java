@@ -18,7 +18,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class BaseTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseTest.class);
-    private ConcurrentHashMap<String, WebDriver> drivers = new ConcurrentHashMap<>();
 
     protected ConfigService configInstance;
 
