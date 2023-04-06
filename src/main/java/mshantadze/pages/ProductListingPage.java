@@ -9,6 +9,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class ProductListingPage extends BasePage {
@@ -28,6 +29,9 @@ public class ProductListingPage extends BasePage {
     @FindBy(xpath = "//span[text() = 'Music']/span")
     private WebElement activeCategory;
 
+    @FindBy(xpath = "//div[@id='srp-river-results']//span[@class='s-item__price']")
+    private List<WebElement> priceLbls;
+
     public List<WebElement> getProductNames() {
         return this.productNameLbls;
     }
@@ -38,5 +42,21 @@ public class ProductListingPage extends BasePage {
 
     public WebElement getActiveCategory() {
         return this.activeCategory;
+    }
+
+    public List<Double> getProductPrices() {
+        List<Double> prices = new LinkedList<>();
+        for (WebElement priceLbl : priceLbls) {
+            LOGGER.info("Price:" + priceLbl.getText());
+            String price = priceLbl.getText().trim();
+            if (price.toLowerCase().contains("to")) {
+                price = price.split(" to ")[0];
+            }
+
+            price = price.replace("$", "");
+            prices.add(Double.parseDouble(price));
+        }
+
+        return prices;
     }
 }

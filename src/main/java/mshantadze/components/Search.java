@@ -1,6 +1,7 @@
 package mshantadze.components;
 
 import mshantadze.components.base.BaseComponent;
+import mshantadze.pages.AdvancedSearchPage;
 import mshantadze.utils.ui.UIElementWrapper;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -23,6 +24,9 @@ public class Search extends UIElementWrapper {
     @FindBy(xpath = "//select[@id = 'gh-cat']/option[text() = 'Music']")
     WebElement musicCategory;
 
+    @FindBy(id = "gh-as-a")
+    WebElement advancedBtn;
+
     public Search(WebDriver driver) {
         super(driver);
         this.driver = driver;
@@ -40,5 +44,10 @@ public class Search extends UIElementWrapper {
     public void selectCategory() {
         click(this.categoriesDropDown);
         click(this.musicCategory);
+    }
+
+    public AdvancedSearchPage goToAdvancedSearchPage() {
+        click(this.advancedBtn);
+        return new AdvancedSearchPage(driver);
     }
 }
