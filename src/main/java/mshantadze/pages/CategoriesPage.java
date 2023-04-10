@@ -15,7 +15,7 @@ public class CategoriesPage extends BasePage {
         PageFactory.initElements(driver, this);
     }
 
-    public WebElement getCategoriesTitle() {
-        return this.categoriesTitle;
+    public String getCategoriesTitle() {
+        return this.categoriesTitle.getText().trim();
     }
 }

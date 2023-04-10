@@ -21,9 +21,6 @@ public class Search extends UIElementWrapper {
     @FindBy(id = "gh-cat-box")
     WebElement categoriesDropDown;
 
-    @FindBy(xpath = "//select[@id = 'gh-cat']/option[text() = 'Music']")
-    WebElement musicCategory;
-
     @FindBy(id = "gh-as-a")
     WebElement advancedBtn;
 
@@ -41,9 +38,10 @@ public class Search extends UIElementWrapper {
         click(btnSearchProducts);
     }
 
-    public void selectCategory() {
-        click(this.categoriesDropDown);
-        click(this.musicCategory);
+    public void selectCategory(String categoryName) {
+        click(categoriesDropDown);
+        WebElement categoryOption = driver.findElement(By.xpath(String.format("//select[@id = 'gh-cat']/option[text() = '%s']", categoryName)));
+        click(categoryOption);
     }
 
     public AdvancedSearchPage goToAdvancedSearchPage() {
