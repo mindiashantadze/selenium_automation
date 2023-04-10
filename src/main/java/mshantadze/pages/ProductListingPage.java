@@ -8,7 +8,9 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.Assert;
 
+import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,29 +31,23 @@ public class ProductListingPage extends BasePage {
     @FindBy(xpath = "//div[@id='srp-river-results']//span[@class='s-item__price']")
     private List<WebElement> priceLbls;
 
-    public boolean doesProductNameContain(String productName) {
+    public void validateProductName(String productName) {
         for (WebElement productNameLbl : productNameLbls) {
             LOGGER.info(productNameLbl.getText());
-            if (!productNameLbl.getText().contains(productName)) {
-                LOGGER.error("Expected product to contain " + productName + ", but the result was " + productNameLbl.getText());
-                return false;
-            }
+            String productNameText = productNameLbl.getText().toLowerCase().trim();
+            Assert.assertTrue(productNameText.contains(productName.toLowerCase()), "Expected product to contain " + productName + ", but the result was " );
         }
-
-        return true;
     }
 
-    public boolean doesProductNameContain(String productName, String excludedWords) {
+    public void validateProductName(String productName, String excludedWords) {
         for (WebElement productNameLbl : productNameLbls) {
             LOGGER.info(productNameLbl.getText());
-            if (!productNameLbl.getText().contains(productName) || productNameLbl.getText().contains(excludedWords)) {
-                LOGGER.error(
-                        "Expected product to contain " + productName + "and not contain " + excludedWords + ", but the result was " + productNameLbl.getText());
-                return false;
-            }
+            String productNameText = productNameLbl.getText().toLowerCase().trim();
+            Assert.assertTrue(
+                    productNameText.contains(productName.toLowerCase()) && productNameText.contains(excludedWords),
+                    "Expected product to contain " + productName + "and not contain " + excludedWords + ", but the result was " + productNameLbl.getText()
+            );
         }
-
-        return true;
     }
 
     public String getNoProductFoundLbl() {
@@ -63,8 +59,8 @@ public class ProductListingPage extends BasePage {
         return activeCategory.getText().contains("Selected category");
     }
 
-    public List<Double> getProductPrices() {
-        List<Double> prices = new LinkedList<>();
+    public List<BigDecimal> getProductPrices() {
+        List<BigDecimal> prices = new LinkedList<>();
         for (WebElement priceLbl : priceLbls) {
             LOGGER.info("Price:" + priceLbl.getText());
             String price = priceLbl.getText().trim();
@@ -74,7 +70,7 @@ public class ProductListingPage extends BasePage {
             }
 
             price = price.replace("$", "");
-            prices.add(Double.parseDouble(price));
+            prices.add(new BigDecimal(price));
         }
 
         return prices;

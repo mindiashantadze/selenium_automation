@@ -24,21 +24,21 @@ public class SearchTest extends BaseTest {
     @Test
     public void searchTest() {
         WebDriver driver = createRemoteDriver();
-        driver.get(configInstance.get("url"));
         HomePage homePage = new HomePage(driver);
-        homePage.verifyThatPageIsLoaded(driver);
+        homePage.open();
+        homePage.verifyThatPageIsLoaded();
         homePage.getSearchSection().typeInSearchField("Ball");
         homePage.getSearchSection().clickSearchButton();
         ProductListingPage plp = new ProductListingPage(driver);
-        Assert.assertTrue(plp.doesProductNameContain("Ball"));
+        plp.validateProductName("Ball");
     }
 
     @Test
-    public void emptySearch() {
+    public void emptySearchTest() {
         WebDriver driver = createRemoteDriver();
-        driver.get(configInstance.get("url"));
         HomePage homePage = new HomePage(driver);
-        homePage.verifyThatPageIsLoaded(driver);
+        homePage.open();
+        homePage.verifyThatPageIsLoaded();
         homePage.getSearchSection().clickSearchButton();
         CategoriesPage categoriesPage = new CategoriesPage(driver);
         Assert.assertEquals(categoriesPage.getCategoriesTitle(), CATEGORIES_TITLE, "Element should have text \"All Categories\"");
@@ -46,11 +46,11 @@ public class SearchTest extends BaseTest {
     }
 
     @Test
-    public void noProductsFound() {
+    public void noProductsFoundTest() {
         WebDriver driver = createRemoteDriver();
-        driver.get(configInstance.get("url"));
         HomePage homePage = new HomePage(driver);
-        homePage.verifyThatPageIsLoaded(driver);
+        homePage.open();
+        homePage.verifyThatPageIsLoaded();
         homePage.getSearchSection().typeInSearchField("somenonexistingproduct");
         homePage.getSearchSection().clickSearchButton();
         ProductListingPage plp = new ProductListingPage(driver);
@@ -58,11 +58,11 @@ public class SearchTest extends BaseTest {
     }
 
     @Test
-    public void searchWithCategories() {
+    public void searchWithCategoriesTest() {
         WebDriver driver = createRemoteDriver();
-        driver.get(configInstance.get("url"));
         HomePage homePage = new HomePage(driver);
-        homePage.verifyThatPageIsLoaded(driver);
+        homePage.open();
+        homePage.verifyThatPageIsLoaded();
         homePage.getSearchSection().typeInSearchField("Ball");
         final String category = "Music";
         homePage.getSearchSection().selectCategory(category);
@@ -72,47 +72,52 @@ public class SearchTest extends BaseTest {
     }
 
     @Test
-    public void excludeProducts() {
+    public void excludeProductsTest() {
         WebDriver driver = createRemoteDriver();
-        driver.get(configInstance.get("url"));
         HomePage homePage = new HomePage(driver);
-        homePage.verifyThatPageIsLoaded(driver);
+        homePage.open();
+        homePage.verifyThatPageIsLoaded();
         AdvancedSearchPage advancedSearchPage = homePage.getSearchSection().goToAdvancedSearchPage();
         advancedSearchPage.typeIncludedWords("Ball");
         advancedSearchPage.typeExcludedWords("Disco");
         advancedSearchPage.submitFilter();
         ProductListingPage plp = new ProductListingPage(driver);
-        Assert.assertTrue(plp.doesProductNameContain("Ball", "Disco"));
+        plp.validateProductName("Ball", "Disco");
     }
 
     @Test
-    public void includeExactWords() {
+    public void includeExactWordsTest() {
         WebDriver driver = createRemoteDriver();
-        driver.get(configInstance.get("url"));
         HomePage homePage = new HomePage(driver);
+        homePage.open();
         AdvancedSearchPage advancedSearchPage = homePage.getSearchSection().goToAdvancedSearchPage();
         advancedSearchPage.typeIncludedWords("Disco Ball");
         advancedSearchPage.selectKeyWordOptions(KeyWordOptions.ExactWordsExactOrder);
         advancedSearchPage.submitFilter();
         ProductListingPage plp = new ProductListingPage(driver);
-        Assert.assertTrue(plp.doesProductNameContain("disco ball"));
+        plp.validateProductName("disco ball");
     }
 
     @Test
-    public void searchByProductRange() {
+    public void searchByProductRangeTest() {
         WebDriver driver = createRemoteDriver();
-        driver.get(configInstance.get("url"));
         HomePage homePage = new HomePage(driver);
+        homePage.open();
         AdvancedSearchPage advancedSearchPage = homePage.getSearchSection().goToAdvancedSearchPage();
         advancedSearchPage.typeIncludedWords("Ball");
-        advancedSearchPage.enterMinPrice(new BigDecimal(20));
-        advancedSearchPage.enterMaxPrice(new BigDecimal(50));
+        BigDecimal enteredMinPrice = new BigDecimal(20);
+        BigDecimal enteredMaxPrice = new BigDecimal(50);
+        advancedSearchPage.enterMinPrice(enteredMinPrice);
+        advancedSearchPage.enterMaxPrice(enteredMaxPrice);
         advancedSearchPage.submitFilter();
         ProductListingPage plp = new ProductListingPage(driver);
-        List<Double> prices = plp.getProductPrices();
-        for (Double price : prices) {
+        List<BigDecimal> prices = plp.getProductPrices();
+        for (BigDecimal price : prices) {
             LOGGER.info(price.toString());
-            Assert.assertTrue(price >= 20 && price <= 50, "Price should be more than 20 and less than 50. actual price: " + price);
+            Assert.assertTrue(
+                    price.compareTo(enteredMinPrice) >= 0 && price.compareTo(enteredMaxPrice) <= 0,
+                    "Price should be more than 20 and less than 50. actual price: " + price
+            );
         }
     }
 }
