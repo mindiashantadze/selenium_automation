@@ -7,7 +7,6 @@ import mshantadze.pages.HomePage;
 import mshantadze.pages.ProductListingPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
@@ -20,11 +19,11 @@ public class SearchTest extends BaseTest {
 
     @Test
     public void searchTest() {
-        WebDriver driver = new ChromeDriver();
+        WebDriver driver = createRemoteDriver();
         try {
             driver.get(configInstance.get("url"));
             HomePage homePage = new HomePage(driver);
-            homePage.verifyThatPageIsLoaded();
+            homePage.verifyThatPageIsLoaded(driver);
             homePage.getSearchSection().typeInSearchField("Ball");
             homePage.getSearchSection().clickSearchButton();
             ProductListingPage plp = new ProductListingPage(driver);
@@ -45,11 +44,11 @@ public class SearchTest extends BaseTest {
 
     @Test
     public void emptySearch() {
-        WebDriver driver = new ChromeDriver();
+        WebDriver driver = createRemoteDriver();
         try {
             driver.get(configInstance.get("url"));
             HomePage homePage = new HomePage(driver);
-            homePage.verifyThatPageIsLoaded();
+            homePage.verifyThatPageIsLoaded(driver);
             homePage.getSearchSection().clickSearchButton();
             CategoriesPage categoriesPage = new CategoriesPage(driver);
             String categoryTitle = categoriesPage.getCategoriesTitle().getText().trim();
@@ -62,11 +61,11 @@ public class SearchTest extends BaseTest {
 
     @Test
     public void noProductsFound() {
-        WebDriver driver = new ChromeDriver();
+        WebDriver driver = createRemoteDriver();
         try {
             driver.get(configInstance.get("url"));
             HomePage homePage = new HomePage(driver);
-            homePage.verifyThatPageIsLoaded();
+            homePage.verifyThatPageIsLoaded(driver);
             homePage.getSearchSection().typeInSearchField("somenonexistingproduct");
             homePage.getSearchSection().clickSearchButton();
             ProductListingPage plp = new ProductListingPage(driver);
@@ -79,11 +78,11 @@ public class SearchTest extends BaseTest {
 
     @Test
     public void searchWithCategories() {
-        WebDriver driver = new ChromeDriver();
+        WebDriver driver = createRemoteDriver();
         try {
             driver.get(configInstance.get("url"));
             HomePage homePage = new HomePage(driver);
-            homePage.verifyThatPageIsLoaded();
+            homePage.verifyThatPageIsLoaded(driver);
             homePage.getSearchSection().typeInSearchField("Ball");
             homePage.getSearchSection().selectCategory();
             homePage.getSearchSection().clickSearchButton();
@@ -98,11 +97,11 @@ public class SearchTest extends BaseTest {
 
     @Test
     public void excludeProducts() {
-        WebDriver driver = new ChromeDriver();
+        WebDriver driver = createRemoteDriver();
         try {
             driver.get(configInstance.get("url"));
             HomePage homePage = new HomePage(driver);
-            homePage.verifyThatPageIsLoaded();
+            homePage.verifyThatPageIsLoaded(driver);
             AdvancedSearchPage advancedSearchPage = homePage.getSearchSection().goToAdvancedSearchPage();
             advancedSearchPage.typeIncludedWords("Ball");
             advancedSearchPage.typeExcludedWords("Disco");
@@ -126,7 +125,7 @@ public class SearchTest extends BaseTest {
 
     @Test
     public void includeExactWords() {
-        WebDriver driver = new ChromeDriver();
+        WebDriver driver = createRemoteDriver();
         try {
             driver.get(configInstance.get("url"));
             HomePage homePage = new HomePage(driver);
@@ -152,7 +151,7 @@ public class SearchTest extends BaseTest {
 
     @Test
     public void searchByProductRange() {
-        WebDriver driver = new ChromeDriver();
+        WebDriver driver = createRemoteDriver();
         try {
             driver.get(configInstance.get("url"));
             HomePage homePage = new HomePage(driver);
