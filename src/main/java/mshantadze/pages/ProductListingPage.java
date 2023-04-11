@@ -35,7 +35,7 @@ public class ProductListingPage extends BasePage {
         for (WebElement productNameLbl : productNameLbls) {
             LOGGER.info(productNameLbl.getText());
             String productNameText = productNameLbl.getText().toLowerCase().trim();
-            Assert.assertTrue(productNameText.contains(productName.toLowerCase()), "Expected product to contain " + productName + ", but the result was " );
+            Assert.assertTrue(productNameText.contains(productName.toLowerCase()), "Expected product to contain " + productName + ", but the result was " + productNameLbl.getText());
         }
     }
 

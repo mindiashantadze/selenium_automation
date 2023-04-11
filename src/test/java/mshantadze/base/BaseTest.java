@@ -1,13 +1,16 @@
 package mshantadze.base;
 
 import mshantadze.services.ConfigService;
+import mshantadze.utils.report.Screenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeSuite;
 
 import java.net.MalformedURLException;
@@ -25,7 +28,10 @@ public abstract class BaseTest {
     }
 
     @AfterMethod
-    public void quitDriver() {
+    public void quitDriver(ITestResult result) {
+        if (result.getStatus() == ITestResult.FAILURE) {
+            Screenshot.takeScreenshot(result.getName(), driverInLocal.get());
+        }
         WebDriver driver = driverInLocal.get();
         if (driver != null) {
             driver.quit();
