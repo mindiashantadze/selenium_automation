@@ -1,6 +1,6 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
 
-<suite name="Search" parallel="methods">
+<suite name="Search" parallel="methods" thread-count="5">
     <test name="Search from homepage">
         <classes>
             <class name="mshantadze.SearchTest" />

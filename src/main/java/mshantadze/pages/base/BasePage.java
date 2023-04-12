@@ -9,17 +9,15 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
-
 import java.time.Duration;
 
 public abstract class BasePage extends UIElementWrapper {
     private static final Logger LOGGER = LoggerFactory.getLogger(BasePage.class);
-    private static final String url = ConfigService.init().get("url");
-    protected WebDriver driver;
+    protected final ConfigService configService = ConfigService.init();
+    protected String url = configService.get("url");
 
     protected BasePage (WebDriver driver) {
         super(driver);
-        this.driver = driver;
     }
 
     public void verifyThatPageIsLoaded() {
@@ -32,5 +30,9 @@ public abstract class BasePage extends UIElementWrapper {
         verifyThatPageIsLoaded();
         super.waitUntilElementIsVisible(element);
         Assert.assertTrue(element.isDisplayed(), "Element should be visible");
+    }
+
+    public void open() {
+        driver.get(url);
     }
 }

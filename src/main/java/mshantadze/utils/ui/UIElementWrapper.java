@@ -13,7 +13,7 @@ import java.time.Duration;
 public class UIElementWrapper {
     private static final Logger LOGGER = LoggerFactory.getLogger(UIElementWrapper.class);
 
-    WebDriver driver;
+    protected WebDriver driver;
 
     public UIElementWrapper(WebDriver driver) {
         this.driver = driver;
